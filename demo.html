@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PichonBot — Demo de Comandos</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --red: #e8210a; --orange: #ff6b1a; --fire: #ff9500;
+      --dark: #0a0a0a; --dark2: #111; --dark3: #1a1a1a;
+      --border: #1e1e1e; --text: #c9cdd3; --muted: #555;
+      --discord: #5865f2; --green: #57f287;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { background:var(--dark); color:var(--text); font-family:'DM Sans',sans-serif; min-height:100vh; }
+
+    /* HEADER */
+    .header {
+      background: linear-gradient(135deg,#0a0a0a,#1a0505);
+      border-bottom: 1px solid var(--border);
+      padding: 18px 28px;
+      display: flex; align-items: center; gap: 14px;
+      position: sticky; top: 0; z-index: 100;
+      backdrop-filter: blur(10px);
+    }
+    .bot-avatar {
+      width:46px; height:46px; border-radius:50%;
+      background: linear-gradient(135deg,var(--red),var(--orange));
+      display:flex; align-items:center; justify-content:center; font-size:22px;
+    }
+    .bot-name { font-weight:700; font-size:18px; color:#fff; }
+    .bot-tag { font-family:'Bebas Neue'; letter-spacing:2px; color:var(--orange); font-size:13px; }
+    .badge { background:var(--discord); color:#fff; font-size:10px; padding:2px 6px; border-radius:4px; font-weight:700; margin-left:6px; vertical-align:middle; }
+    .status { margin-left:auto; display:flex; align-items:center; gap:6px; }
+    .dot { width:9px; height:9px; border-radius:50%; background:var(--green); box-shadow:0 0 8px var(--green); }
+
+    /* LAYOUT */
+    .layout { display:flex; height:calc(100vh - 83px); }
+
+    /* SIDEBAR */
+    .sidebar {
+      width:230px; background:var(--dark2); border-right:1px solid var(--border);
+      overflow-y:auto; flex-shrink:0; padding-bottom:20px;
+    }
+    .cat-label {
+      padding:16px 14px 6px; font-size:10px; font-weight:700;
+      color:var(--muted); text-transform:uppercase; letter-spacing:1.2px;
+    }
+    .cmd-item {
+      margin:1px 8px; padding:7px 10px; border-radius:5px;
+      cursor:pointer; font-size:13px; color:#777;
+      display:flex; align-items:center; justify-content:space-between;
+      transition:all 0.15s;
+    }
+    .cmd-item:hover { background:rgba(255,107,26,0.08); color:#c9cdd3; }
+    .cmd-item.active { background:rgba(255,107,26,0.15); color:var(--orange); font-weight:600; }
+    .admin-badge { font-size:9px; color:var(--red); background:rgba(232,33,10,0.15); padding:1px 5px; border-radius:3px; }
+    .public-badge { font-size:9px; color:var(--green); background:rgba(87,242,135,0.1); padding:1px 5px; border-radius:3px; }
+
+    /* MAIN */
+    .main { flex:1; display:flex; flex-direction:column; overflow:hidden; }
+    .channel-header {
+      padding:12px 20px; border-bottom:1px solid var(--border);
+      display:flex; align-items:center; gap:10px; background:#0f0f0f;
+      font-size:14px;
+    }
+    .channel-name { font-weight:700; color:#fff; }
+    .channel-desc { color:var(--muted); font-size:12px; margin-left:8px; }
+    .messages { flex:1; overflow-y:auto; padding:16px 0; background:#111; }
+    .divider { text-align:center; font-size:11px; color:var(--muted); padding:8px 0 16px; }
+
+    /* MESSAGE */
+    .msg { display:flex; gap:12px; padding:5px 16px; transition:background 0.1s; }
+    .msg:hover { background:rgba(255,255,255,0.02); }
+    .avatar {
+      width:38px; height:38px; border-radius:50%; flex-shrink:0; margin-top:2px;
+      display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:700;
+    }
+    .avatar.bot { background:linear-gradient(135deg,var(--red),var(--orange)); font-size:20px; }
+    .avatar.user { background:#5865f2; color:#fff; font-size:13px; }
+    .avatar.other { background:#3ba55c; color:#fff; font-size:13px; }
+    .msg-body { flex:1; }
+    .msg-header { display:flex; align-items:baseline; gap:8px; margin-bottom:2px; }
+    .msg-user { font-weight:600; font-size:14px; }
+    .msg-user.bot-name-msg { color:var(--orange); }
+    .msg-user.user-name { color:#c9cdd3; }
+    .msg-time { font-size:11px; color:#3f3f3f; }
+    .msg-content { font-size:13.5px; line-height:1.6; color:var(--text); white-space:pre-wrap; }
+    .slash-cmd { color:#7eb8f7; }
+
+    /* EMBED */
+    .embed {
+      background:#1e1e1e; border-left:4px solid var(--orange);
+      border-radius:0 6px 6px 0; padding:10px 14px;
+      margin-top:6px; max-width:420px;
+    }
+    .embed.red { border-left-color:var(--red); }
+    .embed-title { color:var(--orange); font-weight:700; margin-bottom:6px; font-size:14px; }
+    .embed-field { font-size:13px; color:#aaa; margin-bottom:4px; }
+    .embed-field a { color:#7eb8f7; }
+
+    /* RESPONSE BOX */
+    .resp-box {
+      background:rgba(255,107,26,0.08); border:1px solid rgba(255,107,26,0.2);
+      border-radius:6px; padding:8px 12px; font-size:12.5px; color:#ff9a4a;
+      margin-top:4px; max-width:400px;
+    }
+    .resp-box.danger { background:rgba(237,66,69,0.08); border-color:rgba(237,66,69,0.25); color:#ed4245; }
+    .resp-box.success { background:rgba(87,242,135,0.08); border-color:rgba(87,242,135,0.2); color:var(--green); }
+
+    /* LOG */
+    .log-box {
+      background:#0a0a0a; border:1px solid #222; border-radius:6px;
+      padding:10px 12px; font-family:monospace; font-size:11.5px;
+      max-width:460px; margin-top:4px;
+    }
+    .log-line { margin-bottom:3px; }
+    .log-line.ok { color:var(--green); }
+    .log-line.err { color:#ed4245; }
+
+    /* INPUT BAR */
+    .input-bar { padding:12px 16px; background:var(--dark2); border-top:1px solid var(--border); }
+    .fake-input {
+      background:#1e1e1e; border-radius:8px; padding:10px 14px;
+      font-size:13px; color:var(--muted); display:flex; align-items:center; gap:8px;
+    }
+
+    /* INFO PANEL */
+    .info-panel {
+      width:210px; background:#0f0f0f; border-left:1px solid var(--border);
+      padding:18px 14px; overflow-y:auto; flex-shrink:0;
+    }
+    .info-label { font-size:10px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px; }
+    .info-card { background:#1a1a1a; border-radius:8px; padding:12px; margin-bottom:14px; }
+    .info-cmd { color:#7eb8f7; font-weight:700; font-size:14px; margin-bottom:4px; }
+    .info-desc { color:#888; font-size:12px; line-height:1.5; }
+    .access-box { border-radius:6px; padding:7px 10px; font-size:12px; margin-bottom:14px; }
+    .access-box.admin { background:rgba(232,33,10,0.1); border:1px solid rgba(232,33,10,0.3); color:var(--red); }
+    .access-box.pub { background:rgba(87,242,135,0.08); border:1px solid rgba(87,242,135,0.25); color:var(--green); }
+    .prefix-box { background:#1a1a1a; border-radius:6px; padding:7px 10px; font-size:11px; font-family:monospace; color:#c9cdd3; word-break:break-all; }
+
+    /* SCROLLBAR */
+    ::-webkit-scrollbar { width:4px; }
+    ::-webkit-scrollbar-track { background:transparent; }
+    ::-webkit-scrollbar-thumb { background:#333; border-radius:2px; }
+
+    /* MOBILE */
+    @media(max-width:700px) {
+      .sidebar { width:160px; }
+      .info-panel { display:none; }
+    }
+    @media(max-width:500px) {
+      .sidebar { display:none; }
+      .layout { flex-direction:column; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="bot-avatar">🐱</div>
+  <div>
+    <div class="bot-name">PichonBot <span class="badge">BOT</span></div>
+    <div class="bot-tag">Demo interactiva de comandos</div>
+  </div>
+  <div class="status"><div class="dot"></div><span style="font-size:12px;color:var(--green)">Online</span></div>
+</div>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="cat-label">📢 Streams</div>
+    <div class="cmd-item active" onclick="show('live',this)">/live <span class="admin-badge">ADMIN</span></div>
+    <div class="cmd-item" onclick="show('liveall',this)">/liveall <span class="admin-badge">ADMIN</span></div>
+    <div class="cmd-item" onclick="show('next',this)">/next <span class="admin-badge">ADMIN</span></div>
+    <div class="cmd-item" onclick="show('video',this)">/video <span class="admin-badge">ADMIN</span></div>
+
+    <div class="cat-label">✉️ Mensajes</div>
+    <div class="cmd-item" onclick="show('msg-create',this)">/message-create <span class="admin-badge">ADMIN</span></div>
+    <div class="cmd-item" onclick="show('msg-edit',this)">/message-edit <span class="admin-badge">ADMIN</span></div>
+    <div class="cmd-item" onclick="show('msg-delete',this)">/message-delete <span class="admin-badge">ADMIN</span></div>
+    <div class="cmd-item" onclick="show('msg-list',this)">/message-list <span class="admin-badge">ADMIN</span></div>
+
+    <div class="cat-label">🛠️ Moderación</div>
+    <div class="cmd-item" onclick="show('rol',this)">/rol <span class="admin-badge">ADMIN</span></div>
+    <div class="cmd-item" onclick="show('limpiarchat',this)">/limpiarchat <span class="admin-badge">ADMIN</span></div>
+    <div class="cmd-item" onclick="show('bloquear',this)">/bloquear-links <span class="admin-badge">ADMIN</span></div>
+    <div class="cmd-item" onclick="show('desbloquear',this)">/quitar-bloqueo-links <span class="admin-badge">ADMIN</span></div>
+
+    <div class="cat-label">⚙️ Sistema</div>
+    <div class="cmd-item" onclick="show('logs',this)">/logs <span class="admin-badge">ADMIN</span></div>
+    <div class="cmd-item" onclick="show('help',this)">/help <span class="public-badge">TODOS</span></div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="channel-header">
+      <span>💬</span>
+      <span class="channel-name">#demo-comandos</span>
+      <span class="channel-desc" id="chan-desc">— Simulación de /live</span>
+    </div>
+    <div class="messages" id="messages">
+      <div class="divider">— Inicio del canal #demo-comandos —</div>
+    </div>
+    <div class="input-bar">
+      <div class="fake-input"><span>+</span><span>Enviar mensaje a #demo-comandos</span></div>
+    </div>
+  </div>
+
+  <!-- INFO PANEL -->
+  <div class="info-panel">
+    <div class="info-label">Comando</div>
+    <div class="info-card">
+      <div class="info-cmd" id="info-cmd">/live</div>
+      <div class="info-desc" id="info-desc">Anuncia que estás en directo en una plataforma específica.</div>
+    </div>
+    <div class="info-label">Acceso</div>
+    <div class="access-box admin" id="info-access">🔒 Solo Admins / Owner</div>
+    <div class="info-label">Prefijo</div>
+    <div class="prefix-box" id="info-prefix">!live-PichonBot</div>
+  </div>
+
+</div>
+
+<script>
+const DATA = {
+  live: {
+    desc: "Anuncia que estás en directo en una plataforma específica.",
+    admin: true,
+    prefix: "!live-PichonBot",
+    html: `
+      <div class="msg"><div class="avatar user">U</div><div class="msg-body">
+        <div class="msg-header"><span class="msg-user user-name">zUsman_</span><span class="msg-time">19:00</span></div>
+        <div class="msg-content"><span class="slash-cmd">/live</span> platform:tiktok link:https://tiktok.com/@pichon__8/live title:¡Gaming ahora!</div>
+      </div></div>
+      <div class="msg"><div class="avatar bot">🐱</div><div class="msg-body">
+        <div class="msg-header"><span class="msg-user bot-name-msg">PichonBot</span><span class="badge" style="font-size:9px">BOT</span><span class="msg-time">19:00</span></div>
+        <div class="msg-content">Hey @everyone,\n🎵 <strong>Pichon_8</strong> está ahora en directo. Entrad a verle:\nhttps://tiktok.com/@pichon__8/live</div>
+      </div></div>
+      <div class="msg"><div class="avatar bot">🐱</div><div class="msg-body">
+        <div class="msg-header"><span class="msg-user bot-name-msg">PichonBot</span><span class="badge" style="font-size:9px">BOT</span><span class="msg-time">19:00</span></div>
+        <div class="resp-box">✅ ¡Anuncio de directo enviado en #streams!</div>
+      </div></div>`
+  },
+  liveall: {
+    desc: "Anuncia tu directo en todas las plataformas a la vez con un solo comando.",
+    admin: true,
+    prefix: "!liveall-PichonBot",
+    html: `
+      <div class="msg"><div class="avatar user">U</div><div class="msg-body">
+        <div class="msg-header"><span class="msg-user user-name">zUsman_</span><span class="msg-time">19:00</span></div>
+        <div class="msg-content"><span class="slash-cmd">/liveall</span> title:¡Gaming en todas las plataformas!</div>
+      </div></div>
+      <div class="msg"><div class="avatar bot">🐱</div><div class="msg-body">
+        <div class="msg-header"><span class="msg-user bot-name-msg">PichonBot</span><span class="badge" style="font-size:9px">BOT</span><span class="msg-time">19:00</span></div>
+        <div class="msg-content">Hey @everyone, 🔴 <strong>Pichon_8</strong> está en directo!</div>
+        <div class="embed red">
+          <div class="embed-title">🎮 ¡Gaming en todas las plataformas!</div>
+          <div class="embed-field">🎵 <strong>TikTok:</strong> <a>https://tiktok.com/@pichon__8/live</a></div>
+          <div class="embed-field">🟣 <strong>Twitch:</strong> <a>https://twitch.tv/pichon_8</a></div>
+          <div class="embed-field">🟢 <strong>Kick:</strong> <a>https://kick.com/pichon-8</a></div>
+          <div class="embed-field">🔴 <strong>YouTube:</strong> <a>https://youtube.com/@Pichon_8</a></div>
+        </div>
+      </div></div>`
+  },
+  next: {
+    desc: "Anuncia el próximo stream con fecha, descripción y plataforma.",
+    admin: true,
+    prefix: "!next-PichonBot",
+    html: `
+      <div class="msg"><div class="avatar user">U</div><div class="msg-body">
+        <div class="msg-header"><span class="msg-user user-name">zUsman_</span><span class="msg-time">15:00</span></div>
+        <div class="msg-content"><span class="slash-cmd">/next</span> date:Viernes 19:00 description:GTA V con la comunidad platform:tiktok</div>
+      </div></div>
+      <div class="msg"><div class="avatar bot">🐱</div><div class="msg-body">
+        <div class="msg-header"><span class="msg-user bot-name-msg">PichonBot</span><span class="badge" style="font-size:9px">BOT</span><span class="msg-time">15:00</span></div>
+        <div class="embed">
+          <div class="embed-title">📅 Próximo Stream</div>
+          <div class="embed-field">📆 <strong>Fecha:</strong> Viernes 19:00</div>
+          <div class="embed-field">🎮 <strong>Descripción:</strong> GTA V con la comunidad</div>
+          <div class="embed-field">🎵 <strong>Plataforma:</strong> TikTok</div>
+        </div>
+      </div></div>
+      <div class="msg" style="margin-top:8px"><div class="avatar bot">🐱</div><div class="msg-body">
+        <div class="msg-header"><span class="msg-user bot-name-msg">PichonBot</span><span class="badge" style="font-size:9px">BOT</span><span class="msg-time" style="color:#ff6b1a;font-style:italic">— Auto cada 12h —</span></div>
+        <div class="msg-content" style="color:#888;font-size:12px">⏰ El bot reenvía este embed automáticamente cada 12 horas al canal de próximos streams.</div>
+      </div></div>`
+  },
+  video: {
+    desc: "Anuncia un nuevo vídeo subido a una plataforma.",
+    admin: true,
+    prefix: "!video-PichonBot",
+    html: `
+      <div class="msg"><div class="avatar user">U</div><div class="msg-body">
+        <div class="msg-header"><span class="msg-user user-name">zUsman_</span><span class="msg-time">20:15</span></div>
+        <div class="msg-content"><span class="slash-cmd">/video</span> platform:youtube link:https://youtube.com/watch?v=xxx title:Mi nuevo vídeo</div>
+      </div></div>
+      <div class="msg"><div class="avatar bot">🐱</div><div class="msg-body">
+        <div class="msg-header"><span class="msg-user bot-name-msg">PichonBot</span><span class="badge" style="font-size:9px">BOT</span><span class="msg-time">20:15</span></div>
+        <div class="msg-content">Hey @everyone,\n🔴 <strong>Pichon_8</strong> ha subido un nuevo vídeo. ¡Dale al play!\nhttps://youtube.com/watch?v=xxx</div>
+      </div></div>`
+  },
+  'msg-create': {
+    desc: "Envía un mensaje como PichonBot a cualquier canal del servidor.",
+    admin: true,
+    prefix: "!message-create-PichonBot",
+    html: `
+      <div class="msg"><div class="avatar user">U</div><div class="msg-body">
+        <div class="msg-header"><span class="msg-user user-name">zUsman_</span><span class="msg-time">18:00</span></div>
+        <div class="msg-content"><span class="slash-cmd">/message-create</span> canal:#general mensaje:¡Bienvenidos al servidor de Pichon_8! 🎉</div>
+      </div></div>
+      <div class="msg"><div class="avatar bot">🐱</div><div class="msg-body">
+        <div class="msg-header"><span class="msg-user bot-name-msg">PichonBot</span><span class="badge" style="font-size:9px">BOT</span><span class="msg-time">18:00</span></div>
+        <div class="msg-content">¡Bienvenidos al servidor de Pichon_8! 🎉</div>
+      </div></div>
+      <div class="msg"><div class="avatar bot">🐱</div><div class="msg-body">
+        <div class="msg-header"><span class="msg-user bot-name-msg">PichonBot</span><span class="badge" style="font-size:9px">BOT</span><span class="msg-time">18:00</span></div>
+        <div class="resp-box">✅ Mensaje enviado en #general!</div>
+      </div></div>`
+  },
+  'msg-edit': {
+    desc: "Edita un mensaje previamente enviado por PichonBot.",
+    admin: true,
+    prefix: "!message-edit-PichonBot",
+    html: `
+      <div class="msg"><div class="avatar bot">🐱</div><div class="msg-body">
+        <div class="msg-header"><span class="msg-user bot-name-msg">PichonBot</span><span class="badge" style="font-size:9px">BOT</span><span class="msg-time">17:00</span></div>
+        <div class="msg-content" style="text-decoration:line-through;color:#444">Hola a todos!</div>
+      </div></div>
+      <div class="msg"><div class="avatar user">U</div><div class="msg-body">
+        <div class="msg-header"><span class="msg-user user-name">zUsman_</span><span class="msg-time">17:01</span></div>
+        <div class="msg-content"><span class="slash-cmd">/message-edit</span> message-id:1234567890 canal:#general mensaje:¡Hola a todos! 🔥</div>
+      </div></div>
+      <div class="msg"><div class="avatar bot">🐱</div><div class="msg-body">
+        <div class="msg-header"><span class="msg-user bot-name-msg">PichonBot</span><span class="badge" style="font-size:9px">BOT</span><span class="msg-time">17:01</span></div>
+        <div class="msg-content">¡Hola a todos! 🔥<br><span style="font-size:11px;color:#3f3f3f">(editado)</span></div>
+      </div></div>
+      <div class="msg"><div class="avatar bot">🐱</div><div class="msg-body">
+        <div class="msg-header"><span class="msg-user bot-name-msg">PichonBot</span><span class="badge" style="font-size:9px">BOT</span><span class="msg-time">17:01</span></div>
+        <div class="resp-box">✅ ¡Mensaje editado correctamente!</div>
+      </div></div>`
+  },
+  'msg-delete': {
+    desc: "Elimina un mensaje enviado por PichonBot.",
+    admin: true,
+    prefix: "!message-delete-PichonBot",
+    html: `
+      <div class="msg"><div class="avatar user">U</div><div class="msg-body">
+        <div class="msg-header"><span class="msg-user user-name">zUsman_</span><span class="msg-time">17:05</span></div>
+        <div class="msg-content"><span class="slash-cmd">/message-delete</span> message-id:1234567890 canal:#general</div>
+      </div></div>
+      <div class="msg"><div class="avatar bot">🐱</div><div class="msg-body">
+        <div class="msg-header"><span class="msg-user bot-name-msg">PichonBot</span><span class="badge" style="font-size:9px">BOT</span><span class="msg-time">17:05</span></div>
+        <div class="resp-box">✅ ¡Mensaje eliminado correctamente!</div>
+      </div></div>`
+  },
+  'msg-list': {
+    desc: "Lista los últimos mensajes enviados por PichonBot en un canal.",
+    admin: true,
+    prefix: "!message-list-PichonBot",
+    html: `
+      <div class="msg"><div class="avatar user">U</div><div class="msg-body">
+        <div class="msg-header"><span class="msg-user user-name">zUsman_</span><span class="msg-time">17:10</span></div>
+        <div class="msg-content"><span class="slash-cmd">/message-list</span> canal:#general</div>
+      </div></div>
+      <div class="msg"><div class="avatar bot">🐱</div><div class="msg-body">
+        <div class="msg-header"><span class="msg-user bot-name-msg">PichonBot</span><span class="badge" style="font-size:9px">BOT</span><span class="msg-time">17:10</span></div>
+        <div class="msg-content"><strong>📋 Mis últimos mensajes en #general:</strong></div>
+        <div class="log-box">
+          <div class="log-line ok">\`1234567890\` — ¡Bienvenidos al servidor de Pichon_8!...</div>
+          <div class="log-line ok">\`9876543210\` — El próximo stream será el viernes a las...</div>
+          <div class="log-line ok">\`1122334455\` — ¡Gracias a todos por el apoyo! 🔥...</div>
+        </div>
+      </div></div>`
+  },
+  rol: {
+    desc: "Añade o quita un rol a un usuario del servidor.",
+    admin: true,
+    prefix: "!rol-PichonBot",
+    html: `
+      <div class="msg"><div class="avatar user">U</div><div class="msg-body">
+        <div class="msg-header"><span class="msg-user user-name">zUsman_</span><span class="msg-time">18:30</span></div>
+        <div class="msg-content"><span class="slash-cmd">/rol</span> accion:añadir usuario:@zUsman_ rol:⭐ Vip</div>
+      </div></div>
+      <div class="msg"><div class="avatar bot">🐱</div><div class="msg-body">
+        <div class="msg-header"><span class="msg-user bot-name-msg">PichonBot</span><span class="badge" style="font-size:9px">BOT</span><span class="msg-time">18:30</span></div>
+        <div class="resp-box">✅ Rol <strong>⭐ Vip</strong> añadido a <span style="color:#7eb8f7">@zUsman_</span>.</div>
+      </div></div>
+      <div class="msg" style="margin-top:8px"><div class="avatar user">U</div><div class="msg-body">
+        <div class="msg-header"><span class="msg-user user-name">zUsman_</span><span class="msg-time">18:35</span></div>
+        <div class="msg-content"><span class="slash-cmd">/rol</span> accion:quitar usuario:@zUsman_ rol:⭐ Vip</div>
+      </div></div>
+      <div class="msg"><div class="avatar bot">🐱</div><div class="msg-body">
+        <div class="msg-header"><span class="msg-user bot-name-msg">PichonBot</span><span class="badge" style="font-size:9px">BOT</span><span class="msg-time">18:35</span></div>
+        <div class="resp-box">✅ Rol <strong>⭐ Vip</strong> quitado a <span style="color:#7eb8f7">@zUsman_</span>.</div>
+      </div></div>`
+  },
+  limpiarchat: {
+    desc: "Borra todos los mensajes del canal actual, incluso los de más de 14 días.",
+    admin: true,
+    prefix: "!limpiarchat-PichonBot",
+    html: `
+      <div class="msg"><div class="avatar user">U</div><div class="msg-body">
+        <div class="msg-header"><span class="msg-user user-name">zUsman_</span><span class="msg-time">20:00</span></div>
+        <div class="msg-content"><span class="slash-cmd">/limpiarchat</span></div>
+      </div></div>
+      <div class="msg"><div class="avatar bot">🐱</div><div class="msg-body">
+        <div class="msg-header"><span class="msg-user bot-name-msg">PichonBot</span><span class="badge" style="font-size:9px">BOT</span><span class="msg-time">20:00</span></div>
+        <div class="resp-box">🧹 Chat limpiado. Se eliminaron <strong>47</strong> mensajes.</div>
+      </div></div>`
+  },
+  bloquear: {
+    desc: "Bloquea el envío de links en un canal. Los mensajes con links se eliminan automáticamente.",
+    admin: true,
+    prefix: "!bloquearLinks-PichonBot",
+    html: `
+      <div class="msg"><div class="avatar user">U</div><div class="msg-body">
+        <div class="msg-header"><span class="msg-user user-name">zUsman_</span><span class="msg-time">19:15</span></div>
+        <div class="msg-content"><span class="slash-cmd">/bloquear-links</span> canal:#general</div>
+      </div></div>
+      <div class="msg"><div class="avatar bot">🐱</div><div class="msg-body">
+        <div class="msg-header"><span class="msg-user bot-name-msg">PichonBot</span><span class="badge" style="font-size:9px">BOT</span><span class="msg-time">19:15</span></div>
+        <div class="resp-box">🔒 Links bloqueados en #general. Los mensajes con links serán eliminados automáticamente.</div>
+      </div></div>
+      <div class="msg" style="margin-top:8px"><div class="avatar other">O</div><div class="msg-body">
+        <div class="msg-header"><span class="msg-user" style="color:#c9cdd3">OtroUser</span><span class="msg-time">19:16</span></div>
+        <div class="msg-content" style="text-decoration:line-through;color:#444">Mira este link: https://spam.com</div>
+      </div></div>
+      <div class="msg"><div class="avatar bot">🐱</div><div class="msg-body">
+        <div class="msg-header"><span class="msg-user bot-name-msg">PichonBot</span><span class="badge" style="font-size:9px">BOT</span><span class="msg-time">19:16</span></div>
+        <div class="resp-box danger">⛔ @OtroUser, no está permitido enviar links en este canal. <span style="color:#555;font-size:11px">(se borra en 5s)</span></div>
+      </div></div>`
+  },
+  desbloquear: {
+    desc: "Quita el bloqueo de links en un canal.",
+    admin: true,
+    prefix: "!quitarbloqueoLinks-PichonBot",
+    html: `
+      <div class="msg"><div class="avatar user">U</div><div class="msg-body">
+        <div class="msg-header"><span class="msg-user user-name">zUsman_</span><span class="msg-time">19:20</span></div>
+        <div class="msg-content"><span class="slash-cmd">/quitar-bloqueo-links</span> canal:#general</div>
+      </div></div>
+      <div class="msg"><div class="avatar bot">🐱</div><div class="msg-body">
+        <div class="msg-header"><span class="msg-user bot-name-msg">PichonBot</span><span class="badge" style="font-size:9px">BOT</span><span class="msg-time">19:20</span></div>
+        <div class="resp-box success">🔓 Bloqueo de links eliminado en #general.</div>
+      </div></div>`
+  },
+  logs: {
+    desc: "Muestra los últimos logs del bot en tiempo real.",
+    admin: true,
+    prefix: "!logs-PichonBot",
+    html: `
+      <div class="msg"><div class="avatar user">U</div><div class="msg-body">
+        <div class="msg-header"><span class="msg-user user-name">zUsman_</span><span class="msg-time">18:10</span></div>
+        <div class="msg-content"><span class="slash-cmd">/logs</span></div>
+      </div></div>
+      <div class="msg"><div class="avatar bot">🐱</div><div class="msg-body">
+        <div class="msg-header"><span class="msg-user bot-name-msg">PichonBot</span><span class="badge" style="font-size:9px">BOT</span><span class="msg-time">18:10</span></div>
+        <div class="msg-content"><strong>📜 Últimos logs de PichonBot:</strong></div>
+        <div class="log-box">
+          <div class="log-line ok">[18:00:01] ℹ️ ✅ Slash commands registrados</div>
+          <div class="log-line ok">[18:00:02] ℹ️ ⏰ Scheduled auto-services active</div>
+          <div class="log-line ok">[18:00:03] ℹ️ ✅ Database connected and tables ready!</div>
+          <div class="log-line ok">[18:02:31] ℹ️ [TikTok] ✅ Conectado a @pichon__8</div>
+          <div class="log-line ok">[18:05:12] ℹ️ [TikTok] 🎵 EN DIRECTO: @pichon__8</div>
+          <div class="log-line ok">[18:05:13] ℹ️ [TikTok LiveAll] ✅ ¡Anuncio enviado en 4 plataforma(s)!</div>
+          <div class="log-line ok">[18:10:00] ℹ️ [Auto] Recordatorio de próximo stream enviado.</div>
+          <div class="log-line err">[18:15:44] ❌ [YouTube] API key not valid</div>
+        </div>
+      </div></div>`
+  },
+  help: {
+    desc: "Muestra todos los comandos disponibles del bot. Accesible por todos los usuarios.",
+    admin: false,
+    prefix: "!help-PichonBot",
+    html: `
+      <div class="msg"><div class="avatar other">O</div><div class="msg-body">
+        <div class="msg-header"><span class="msg-user" style="color:#c9cdd3">OtroUser</span><span class="msg-time">17:00</span></div>
+        <div class="msg-content"><span class="slash-cmd">/help</span></div>
+      </div></div>
+      <div class="msg"><div class="avatar bot">🐱</div><div class="msg-body">
+        <div class="msg-header"><span class="msg-user bot-name-msg">PichonBot</span><span class="badge" style="font-size:9px">BOT</span><span class="msg-time">17:00</span></div>
+        <div class="embed">
+          <div class="embed-title">🐱 PichonBot — Comandos disponibles</div>
+          <div style="font-size:10px;color:#555;font-weight:700;text-transform:uppercase;margin:6px 0 4px">📢 Streams</div>
+          <div class="embed-field"><span style="color:#7eb8f7">/live</span> — Anuncia directo en una plataforma</div>
+          <div class="embed-field"><span style="color:#7eb8f7">/liveall</span> — Anuncia en todas las plataformas</div>
+          <div class="embed-field"><span style="color:#7eb8f7">/next</span> — Anuncia el próximo stream</div>
+          <div class="embed-field"><span style="color:#7eb8f7">/video</span> — Anuncia un nuevo vídeo</div>
+          <div style="font-size:10px;color:#555;font-weight:700;text-transform:uppercase;margin:8px 0 4px">🛠️ Moderación</div>
+          <div class="embed-field"><span style="color:#7eb8f7">/rol</span> — Añade/quita un rol a un usuario</div>
+          <div class="embed-field"><span style="color:#7eb8f7">/limpiarchat</span> — Borra todos los mensajes</div>
+          <div class="embed-field"><span style="color:#7eb8f7">/bloquear-links</span> — Bloquea links en un canal</div>
+          <div style="font-size:10px;color:#555;font-weight:700;text-transform:uppercase;margin:8px 0 4px">⚙️ Sistema</div>
+          <div class="embed-field"><span style="color:#7eb8f7">/logs</span> — Ver logs del bot</div>
+          <div class="embed-field"><span style="color:#7eb8f7">/help</span> — Este mensaje</div>
+        </div>
+      </div></div>`
+  }
+};
+
+function show(key, el) {
+  document.querySelectorAll('.cmd-item').forEach(i => i.classList.remove('active'));
+  el.classList.add('active');
+  const d = DATA[key];
+  document.getElementById('messages').innerHTML = `<div class="divider">— Inicio del canal #demo-comandos —</div>` + d.html;
+  document.getElementById('chan-desc').textContent = `— Simulación de /${key.replace('msg-','message-')}`;
+  document.getElementById('info-cmd').textContent = `/${key.replace('msg-','message-')}`;
+  document.getElementById('info-desc').textContent = d.desc;
+  document.getElementById('info-prefix').textContent = d.prefix;
+  const acc = document.getElementById('info-access');
+  acc.className = 'access-box ' + (d.admin ? 'admin' : 'pub');
+  acc.textContent = d.admin ? '🔒 Solo Admins / Owner' : '🌐 Todos los usuarios';
+}
+</script>
+</body>
+</html>
