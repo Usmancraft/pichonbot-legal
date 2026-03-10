@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PichonBot — Legal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --red:     #e8210a;
+      --orange:  #ff6b1a;
+      --fire:    #ff9500;
+      --dark:    #0a0a0a;
+      --dark2:   #111111;
+      --dark3:   #1a1a1a;
+      --border:  #2a2a2a;
+      --text:    #e8e8e8;
+      --muted:   #888;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--dark);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.75;
+      overflow-x: hidden;
+    }
+
+    /* ── FIRE BACKGROUND ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 50% -10%, rgba(232,33,10,0.18) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 30% at 80% 100%, rgba(255,107,26,0.1) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── NAVBAR ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2.5rem;
+      height: 64px;
+      background: rgba(10,10,10,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.6rem;
+      letter-spacing: 2px;
+      background: linear-gradient(90deg, var(--red), var(--orange));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--orange); }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 7rem 2rem 4rem;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      padding: 0.3rem 1rem;
+      border: 1px solid rgba(255,107,26,0.4);
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 1.5rem;
+      background: rgba(255,107,26,0.06);
+    }
+
+    .hero h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3.5rem, 8vw, 7rem);
+      letter-spacing: 4px;
+      line-height: 1;
+      background: linear-gradient(135deg, #fff 0%, var(--orange) 50%, var(--red) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 1rem;
+    }
+
+    .hero p {
+      color: var(--muted);
+      font-size: 1rem;
+      max-width: 480px;
+      margin: 0 auto 2rem;
+    }
+
+    .last-updated {
+      font-size: 0.78rem;
+      color: #555;
+      letter-spacing: 0.5px;
+    }
+
+    /* ── DIVIDER ── */
+    .fire-divider {
+      width: 80px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--red), var(--orange), var(--fire));
+      margin: 0 auto 4rem;
+      border-radius: 2px;
+    }
+
+    /* ── TABS ── */
+    .tabs {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 3rem;
+      padding: 0 1rem;
+    }
+
+    .tab-btn {
+      padding: 0.6rem 1.8rem;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--dark2);
+      color: var(--muted);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      letter-spacing: 0.3px;
+    }
+
+    .tab-btn:hover {
+      border-color: var(--orange);
+      color: var(--orange);
+    }
+
+    .tab-btn.active {
+      background: linear-gradient(135deg, var(--red), var(--orange));
+      border-color: transparent;
+      color: #fff;
+      font-weight: 600;
+    }
+
+    /* ── CONTENT ── */
+    .content {
+      position: relative;
+      z-index: 1;
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 2rem 6rem;
+    }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* ── SECTION CARDS ── */
+    .section {
+      background: var(--dark2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2rem 2.5rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s;
+    }
+
+    .section::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(180deg, var(--red), var(--orange));
+      border-radius: 4px 0 0 4px;
+    }
+
+    .section:hover { border-color: rgba(255,107,26,0.3); }
+
+    .section-number {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+      color: var(--orange);
+      opacity: 0.7;
+      margin-bottom: 0.4rem;
+      text-transform: uppercase;
+    }
+
+    .section h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      letter-spacing: 2px;
+      color: #fff;
+      margin-bottom: 1rem;
+    }
+
+    .section p, .section li {
+      color: #aaa;
+      font-size: 0.92rem;
+      line-height: 1.8;
+    }
+
+    .section ul {
+      padding-left: 1.4rem;
+      margin-top: 0.5rem;
+    }
+
+    .section li { margin-bottom: 0.4rem; }
+
+    .section li::marker { color: var(--orange); }
+
+    .highlight {
+      color: var(--orange);
+      font-weight: 500;
+    }
+
+    /* ── SUPPORT CARD ── */
+    .support-card {
+      background: linear-gradient(135deg, rgba(232,33,10,0.12), rgba(255,107,26,0.08));
+      border: 1px solid rgba(255,107,26,0.25);
+      border-radius: 12px;
+      padding: 2.5rem;
+      text-align: center;
+      margin-top: 3rem;
+    }
+
+    .support-card h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      letter-spacing: 2px;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(90deg, var(--red), var(--orange));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .support-card p {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .discord-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.75rem 2rem;
+      background: linear-gradient(135deg, var(--red), var(--orange));
+      color: #fff;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      letter-spacing: 0.3px;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+
+    .discord-btn:hover { opacity: 0.85; transform: translateY(-1px); }
+
+    .discord-btn svg { width: 20px; height: 20px; fill: #fff; }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid var(--border);
+      padding: 2rem;
+      text-align: center;
+    }
+
+    footer p {
+      font-size: 0.8rem;
+      color: #444;
+    }
+
+    footer span {
+      background: linear-gradient(90deg, var(--red), var(--orange));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 600;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .section {
+      animation: fadeUp 0.4s ease both;
+    }
+
+    .section:nth-child(1) { animation-delay: 0.05s; }
+    .section:nth-child(2) { animation-delay: 0.1s; }
+    .section:nth-child(3) { animation-delay: 0.15s; }
+    .section:nth-child(4) { animation-delay: 0.2s; }
+    .section:nth-child(5) { animation-delay: 0.25s; }
+    .section:nth-child(6) { animation-delay: 0.3s; }
+
+    @media (max-width: 600px) {
+      nav { padding: 0 1.2rem; }
+      .nav-links { gap: 1rem; }
+      .section { padding: 1.5rem; }
+      .hero { padding: 5rem 1.5rem 3rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-logo">PichonBot</div>
+    <ul class="nav-links">
+      <li><a href="#" onclick="showTab('terms')">Términos</a></li>
+      <li><a href="#" onclick="showTab('privacy')">Privacidad</a></li>
+      <li><a href="#" onclick="showTab('security')">Seguridad</a></li>
+      <li><a href="https://discord.gg/f5gpNKJj59" target="_blank">Soporte</a></li>
+    </ul>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-badge">🤖 Bot Privado de Discord</div>
+    <h1>Legal &amp; Privacidad</h1>
+    <p>Documentación oficial de PichonBot — el bot de la comunidad de Pichon_8.</p>
+    <p class="last-updated">Última actualización: Marzo 2026</p>
+  </section>
+
+  <div class="fire-divider"></div>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showTab('terms')">📋 Términos de Uso</button>
+    <button class="tab-btn" onclick="showTab('privacy')">🔒 Privacidad</button>
+    <button class="tab-btn" onclick="showTab('security')">🛡️ Seguridad</button>
+  </div>
+
+  <div class="content">
+
+    <!-- ── TÉRMINOS ── -->
+    <div class="tab-content active" id="tab-terms">
+
+      <div class="section">
+        <div class="section-number">01</div>
+        <h2>Aceptación de los Términos</h2>
+        <p>Al interactuar con <span class="highlight">PichonBot</span> en cualquier servidor de Discord, aceptas estos términos de uso. Si no estás de acuerdo, te pedimos que no uses el bot.</p>
+      </div>
+
+      <div class="section">
+        <div class="section-number">02</div>
+        <h2>Descripción del Servicio</h2>
+        <p>PichonBot es un bot privado de Discord diseñado exclusivamente para la comunidad de <span class="highlight">Pichon_8</span>. Sus funciones incluyen:</p>
+        <ul>
+          <li>Anuncios automáticos de streams en vivo en Twitch, YouTube, TikTok, Kick e Instagram.</li>
+          <li>Notificaciones de nuevos vídeos publicados.</li>
+          <li>Gestión de mensajes en canales de Discord.</li>
+          <li>Asistente de IA con Gemini para responder preguntas de la comunidad.</li>
+          <li>Comandos de administración para los moderadores del servidor.</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <div class="section-number">03</div>
+        <h2>Uso Permitido</h2>
+        <p>El uso de PichonBot está restringido a los servidores de Discord autorizados por el propietario. Queda estrictamente prohibido:</p>
+        <ul>
+          <li>Intentar explotar, hackear o modificar el bot sin autorización.</li>
+          <li>Usar el bot para enviar spam, contenido ofensivo o ilegal.</li>
+          <li>Intentar acceder a datos de otros usuarios a través del bot.</li>
+          <li>Redistribuir o copiar el código del bot sin permiso explícito.</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <div class="section-number">04</div>
+        <h2>Comandos de Administración</h2>
+        <p>Los comandos <span class="highlight">/live</span>, <span class="highlight">/liveall</span>, <span class="highlight">/next</span>, <span class="highlight">/video</span>, <span class="highlight">/message-*</span> y <span class="highlight">/logs</span> están reservados exclusivamente para usuarios con permisos de <strong>Administrador</strong> en el servidor. El abuso de estos comandos puede resultar en la revocación del acceso.</p>
+      </div>
+
+      <div class="section">
+        <div class="section-number">05</div>
+        <h2>Disponibilidad del Servicio</h2>
+        <p>PichonBot se proporciona <span class="highlight">"tal cual"</span> sin garantía de disponibilidad continua. El propietario se reserva el derecho de modificar, pausar o discontinuar el servicio en cualquier momento sin previo aviso.</p>
+      </div>
+
+      <div class="section">
+        <div class="section-number">06</div>
+        <h2>Modificaciones</h2>
+        <p>Estos términos pueden actualizarse en cualquier momento. El uso continuado del bot tras una actualización implica la aceptación de los nuevos términos.</p>
+      </div>
+
+    </div>
+
+    <!-- ── PRIVACIDAD ── -->
+    <div class="tab-content" id="tab-privacy">
+
+      <div class="section">
+        <div class="section-number">01</div>
+        <h2>Datos que Recopilamos</h2>
+        <p>PichonBot recopila únicamente los datos mínimos necesarios para su funcionamiento:</p>
+        <ul>
+          <li><span class="highlight">Nombre de usuario de Discord</span> — para registrar quién ejecutó un comando de anuncio.</li>
+          <li><span class="highlight">IDs de canales</span> — para enviar notificaciones al canal correcto.</li>
+          <li><span class="highlight">Contenido de mensajes mencionando al bot</span> — exclusivamente para procesar respuestas de IA en el canal designado.</li>
+          <li><span class="highlight">Datos de streams y vídeos</span> — título, enlace y plataforma, almacenados en base de datos para evitar notificaciones duplicadas.</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <div class="section-number">02</div>
+        <h2>Datos que NO Recopilamos</h2>
+        <ul>
+          <li>Contraseñas, tokens ni credenciales de ningún tipo.</li>
+          <li>Mensajes privados (DMs) de usuarios.</li>
+          <li>Información personal como email, dirección o datos de pago.</li>
+          <li>Historial de conversaciones con la IA — cada mensaje es independiente.</li>
+          <li>Datos de usuarios menores de edad de forma intencionada.</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <div class="section-number">03</div>
+        <h2>Uso de los Datos</h2>
+        <p>Los datos recopilados se usan exclusivamente para:</p>
+        <ul>
+          <li>Enviar notificaciones de streams y vídeos correctamente.</li>
+          <li>Evitar anuncios duplicados mediante registros en base de datos.</li>
+          <li>Generar logs de actividad para diagnóstico técnico.</li>
+          <li>Procesar preguntas enviadas a la IA integrada.</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <div class="section-number">04</div>
+        <h2>Almacenamiento y Retención</h2>
+        <p>Los datos se almacenan en una base de datos privada <span class="highlight">MySQL</span> alojada en servidores seguros. Los registros de notificaciones se limpian automáticamente de forma periódica para mantener la base de datos ligera. Los logs del bot se almacenan solo en memoria y se borran al reiniciar el servidor.</p>
+      </div>
+
+      <div class="section">
+        <div class="section-number">05</div>
+        <h2>Servicios de Terceros</h2>
+        <p>PichonBot se integra con los siguientes servicios externos, sujetos a sus propias políticas de privacidad:</p>
+        <ul>
+          <li><span class="highlight">Discord API</span> — para el funcionamiento del bot.</li>
+          <li><span class="highlight">Google Gemini API</span> — para las respuestas de IA.</li>
+          <li><span class="highlight">Twitch API</span> — para detección de streams en vivo.</li>
+          <li><span class="highlight">YouTube Data API</span> — para detección de nuevos vídeos.</li>
+          <li><span class="highlight">TikTok Live Connector</span> — para detección de lives en TikTok.</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <div class="section-number">06</div>
+        <h2>Tus Derechos</h2>
+        <p>Puedes solicitar en cualquier momento la eliminación de tus datos almacenados contactando con el equipo de soporte en nuestro servidor de Discord. Atenderemos tu solicitud en un plazo razonable.</p>
+      </div>
+
+    </div>
+
+    <!-- ── SEGURIDAD ── -->
+    <div class="tab-content" id="tab-security">
+
+      <div class="section">
+        <div class="section-number">01</div>
+        <h2>Medidas de Seguridad</h2>
+        <p>PichonBot implementa las siguientes medidas para proteger el servicio y sus usuarios:</p>
+        <ul>
+          <li>Las credenciales (tokens, API keys) se almacenan en variables de entorno <span class="highlight">.env</span> nunca expuestas públicamente.</li>
+          <li>El bot opera solo en servidores autorizados mediante <span class="highlight">Guild ID</span> fijo.</li>
+          <li>Los comandos sensibles requieren permisos de <span class="highlight">Administrador</span> en Discord.</li>
+          <li>El bot solo puede editar o eliminar sus propios mensajes, nunca los de otros usuarios.</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <div class="section-number">02</div>
+        <h2>Control de Acceso</h2>
+        <p>El sistema de permisos funciona de la siguiente manera:</p>
+        <ul>
+          <li><span class="highlight">Usuarios regulares</span> — solo pueden usar <code>/help</code> y mencionar al bot en el canal de IA.</li>
+          <li><span class="highlight">Administradores</span> — acceso completo a todos los comandos del bot.</li>
+          <li><span class="highlight">Bot owner</span> — control total sobre la configuración y despliegue del bot.</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <div class="section-number">03</div>
+        <h2>Protección contra Abusos</h2>
+        <ul>
+          <li>La IA integrada solo responde en el canal designado, evitando spam en otros canales.</li>
+          <li>Los servicios automáticos incluyen manejo de errores para evitar bucles de notificaciones.</li>
+          <li>El sistema detecta si un stream ya fue anunciado antes de enviar una nueva notificación.</li>
+          <li>Los errores de APIs externas se registran en logs sin interrumpir el funcionamiento general.</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <div class="section-number">04</div>
+        <h2>Vulnerabilidades Conocidas</h2>
+        <p>Si descubres una vulnerabilidad de seguridad en PichonBot, te pedimos que <span class="highlight">no la hagas pública</span> y la reportes de forma responsable a través de nuestro servidor de soporte en Discord. Agradecemos la colaboración responsable de la comunidad.</p>
+      </div>
+
+      <div class="section">
+        <div class="section-number">05</div>
+        <h2>Actualizaciones de Seguridad</h2>
+        <p>El bot se mantiene actualizado con las últimas versiones de sus dependencias. Las actualizaciones críticas de seguridad se aplican con la mayor rapidez posible. Se recomienda a los administradores del servidor estar atentos a los anuncios del canal oficial.</p>
+      </div>
+
+    </div>
+
+    <!-- ── SUPPORT ── -->
+    <div class="support-card">
+      <h3>¿Tienes alguna pregunta?</h3>
+      <p>Únete a nuestra comunidad de Discord para soporte, reportar problemas o simplemente pasar el rato con la comunidad de Pichon_8.</p>
+      <a class="discord-btn" href="https://discord.gg/f5gpNKJj59" target="_blank">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.003.02.01.04.027.052a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/>
+        </svg>
+        Unirse al Discord de Soporte
+      </a>
+    </div>
+
+  </div>
+
+  <footer>
+    <p>© 2026 <span>PichonBot</span> — Bot privado de la comunidad de Pichon_8. Todos los derechos reservados.</p>
+  </footer>
+
+  <script>
+    function showTab(tab) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+      document.getElementById('tab-' + tab).classList.add('active');
+      event.target.classList.add('active');
+    }
+  </script>
+
+</body>
+</html>
