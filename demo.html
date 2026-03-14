@@ -169,11 +169,10 @@
   <div class="mobile-cat">
     <div class="mobile-cat-label">✉️ Mensajes</div>
     <div class="mobile-cat-row">
-      <button class="mobile-btn" onclick="show('msg-create',this)">/msg-create</button>
-      <button class="mobile-btn" onclick="show('msg-edit',this)">/msg-edit</button>
-      <button class="mobile-btn" onclick="show('msg-delete',this)">/msg-delete</button>
-      <button class="mobile-btn" onclick="show('msg-list',this)">/msg-list</button>
-      <button class="mobile-btn" onclick="show('delbotmsg',this)">/delbotmsg</button>
+      <button class="mobile-btn" onclick="show('msg-create',this)">/msg crear</button>
+      <button class="mobile-btn" onclick="show('msg-edit',this)">/msg editar</button>
+      <button class="mobile-btn" onclick="show('msg-delete',this)">/msg eliminar</button>
+      <button class="mobile-btn" onclick="show('msg-list',this)">/msg lista</button>
     </div>
   </div>
   <div class="mobile-cat">
@@ -204,11 +203,10 @@
     <div class="cmd-item" onclick="show('next',this)">/next <span class="admin-b">ADMIN</span></div>
     <div class="cmd-item" onclick="show('video',this)">/video <span class="admin-b">ADMIN</span></div>
     <div class="cat-label">✉️ Mensajes</div>
-    <div class="cmd-item" onclick="show('msg-create',this)">/message-create <span class="admin-b">ADMIN</span></div>
-    <div class="cmd-item" onclick="show('msg-edit',this)">/message-edit <span class="admin-b">ADMIN</span></div>
-    <div class="cmd-item" onclick="show('msg-delete',this)">/message-delete <span class="admin-b">ADMIN</span></div>
-    <div class="cmd-item" onclick="show('msg-list',this)">/message-list <span class="admin-b">ADMIN</span></div>
-    <div class="cmd-item" onclick="show('delbotmsg',this)">/delbotmsg <span class="admin-b">ADMIN</span></div>
+    <div class="cmd-item" onclick="show('msg-create',this)">/message crear <span class="admin-b">ADMIN</span></div>
+    <div class="cmd-item" onclick="show('msg-edit',this)">/message editar <span class="admin-b">ADMIN</span></div>
+    <div class="cmd-item" onclick="show('msg-delete',this)">/message eliminar <span class="admin-b">ADMIN</span></div>
+    <div class="cmd-item" onclick="show('msg-list',this)">/message lista <span class="admin-b">ADMIN</span></div>
     <div class="cat-label">🛠️ Moderación</div>
     <div class="cmd-item" onclick="show('rol',this)">/rol <span class="admin-b">ADMIN</span></div>
     <div class="cmd-item" onclick="show('limpiarchat',this)">/limpiarchat <span class="admin-b">ADMIN</span></div>
@@ -311,42 +309,64 @@ const DATA = {
       <div class="msg-head"><span class="msg-user bot-u">PichonBot</span><span class="badge">BOT</span><span class="msg-time">20:15</span></div>
       <div class="msg-content">Hey @everyone,\n🔴 <strong>Pichon_8</strong> ha subido un nuevo vídeo. ¡Dale al play!\nhttps://youtube.com/watch?v=xxx</div>
     </div></div>`},
-  'msg-create':{desc:"Envía un mensaje como PichonBot. Elige entre texto normal o embed personalizado con título, imagen y botón.",admin:true,prefix:"!message-create-PichonBot",html:`
+  'msg-create':{desc:"Envía un mensaje como PichonBot. 3 opciones: texto, embed simple o embed con fields (cajitas de colores).",admin:true,prefix:"!message-crear-PichonBot",html:`
     <div style="padding:8px 14px 4px;font-size:11px;color:#555;font-style:italic">— Opción 1: Texto normal —</div>
     <div class="msg"><div class="avatar pichon">P</div><div class="msg-body">
       <div class="msg-head"><span class="msg-user pichon-u">Pichón</span><span class="msg-time">18:00</span></div>
-      <div class="msg-content"><span class="slash">/message-create</span> canal:#general tipo:📝 Texto normal mensaje:¡Bienvenidos al servidor de Pichon_8! 🎉</div>
+      <div class="msg-content"><span class="slash">/message</span> accion:✉️ Crear canal:#general tipo:📝 Texto normal mensaje:¡Bienvenidos! 🎉</div>
     </div></div>
     <div class="msg"><div class="avatar bot">🐱</div><div class="msg-body">
       <div class="msg-head"><span class="msg-user bot-u">PichonBot</span><span class="badge">BOT</span><span class="msg-time">18:00</span></div>
-      <div class="msg-content">¡Bienvenidos al servidor de Pichon_8! 🎉</div>
+      <div class="msg-content">¡Bienvenidos! 🎉</div>
     </div></div>
-    <div style="padding:12px 14px 4px;font-size:11px;color:#555;font-style:italic">— Opción 2: Embed personalizado (se abre un menú) —</div>
+    <div style="padding:12px 14px 4px;font-size:11px;color:#555;font-style:italic">— Opción 2: Embed simple (abre menú) —</div>
     <div class="msg"><div class="avatar pichon">P</div><div class="msg-body">
       <div class="msg-head"><span class="msg-user pichon-u">Pichón</span><span class="msg-time">18:01</span></div>
-      <div class="msg-content"><span class="slash">/message-create</span> canal:#general tipo:🎨 Embed personalizado</div>
+      <div class="msg-content"><span class="slash">/message</span> accion:✉️ Crear canal:#general tipo:🎨 Embed simple</div>
     </div></div>
-    <div style="margin:6px 14px;background:#1a1a1a;border:1px solid #333;border-radius:8px;padding:14px;max-width:360px">
-      <div style="font-weight:700;color:#fff;font-size:13px;margin-bottom:12px">Crear Embed Personalizado</div>
-      <div style="margin-bottom:8px"><div style="font-size:10px;color:#aaa;margin-bottom:3px">TÍTULO</div><div style="background:#111;border:1px solid #333;border-radius:4px;padding:6px 8px;font-size:12px;color:#777">Requisitos para Alianza</div></div>
-      <div style="margin-bottom:8px"><div style="font-size:10px;color:#aaa;margin-bottom:3px">DESCRIPCIÓN / TEXTO</div><div style="background:#111;border:1px solid #333;border-radius:4px;padding:6px 8px;font-size:12px;color:#777;min-height:50px">¡Buscamos comunidades activas para hacer alianza! Mínimo 500 miembros reales...</div></div>
-      <div style="margin-bottom:8px"><div style="font-size:10px;color:#aaa;margin-bottom:3px">URL DE IMAGEN (OPCIONAL)</div><div style="background:#111;border:1px solid #333;border-radius:4px;padding:6px 8px;font-size:12px;color:#777">https://i.imgur.com/ejemplo.png</div></div>
-      <div style="margin-bottom:8px"><div style="font-size:10px;color:#aaa;margin-bottom:3px">BOTÓN: TEXTO|URL (OPCIONAL)</div><div style="background:#111;border:1px solid #333;border-radius:4px;padding:6px 8px;font-size:12px;color:#777">Solicitar Alianza|https://discord.gg/f5gpNKJj59</div></div>
-      <div style="margin-bottom:12px"><div style="font-size:10px;color:#aaa;margin-bottom:3px">COLOR EN HEX (OPCIONAL)</div><div style="background:#111;border:1px solid #333;border-radius:4px;padding:6px 8px;font-size:12px;color:#777">#ff6b1a</div></div>
-      <div style="display:flex;gap:8px;justify-content:flex-end"><div style="padding:6px 14px;border-radius:4px;background:#4e5058;font-size:12px;color:#fff;cursor:pointer">Cancelar</div><div style="padding:6px 14px;border-radius:4px;background:#5865f2;font-size:12px;color:#fff;cursor:pointer">Enviar</div></div>
+    <div style="margin:6px 14px;background:#1a1a1a;border:1px solid #333;border-radius:8px;padding:14px;max-width:340px">
+      <div style="font-weight:700;color:#fff;font-size:13px;margin-bottom:10px">Crear Embed Simple</div>
+      <div style="margin-bottom:7px"><div style="font-size:10px;color:#aaa;margin-bottom:2px">TÍTULO</div><div style="background:#111;border:1px solid #333;border-radius:4px;padding:5px 8px;font-size:12px;color:#777">Requisitos para Alianza</div></div>
+      <div style="margin-bottom:7px"><div style="font-size:10px;color:#aaa;margin-bottom:2px">DESCRIPCIÓN</div><div style="background:#111;border:1px solid #333;border-radius:4px;padding:5px 8px;font-size:12px;color:#777;min-height:40px">¡Buscamos comunidades activas! Mínimo 500 miembros...</div></div>
+      <div style="margin-bottom:7px"><div style="font-size:10px;color:#aaa;margin-bottom:2px">BOTÓN: TEXTO|URL</div><div style="background:#111;border:1px solid #333;border-radius:4px;padding:5px 8px;font-size:12px;color:#777">Solicitar|https://discord.gg/f5gpNKJj59</div></div>
+      <div style="margin-bottom:10px"><div style="font-size:10px;color:#aaa;margin-bottom:2px">COLOR HEX</div><div style="background:#111;border:1px solid #333;border-radius:4px;padding:5px 8px;font-size:12px;color:#777">#ff6b1a</div></div>
+      <div style="display:flex;gap:8px;justify-content:flex-end"><div style="padding:5px 12px;border-radius:4px;background:#4e5058;font-size:12px;color:#fff">Cancelar</div><div style="padding:5px 12px;border-radius:4px;background:#5865f2;font-size:12px;color:#fff">Enviar</div></div>
     </div>
-    <div class="msg" style="margin-top:8px"><div class="avatar bot">🐱</div><div class="msg-body">
+    <div class="msg" style="margin-top:6px"><div class="avatar bot">🐱</div><div class="msg-body">
       <div class="msg-head"><span class="msg-user bot-u">PichonBot</span><span class="badge">BOT</span><span class="msg-time">18:01</span></div>
-      <div class="embed" style="border-left-color:#ff6b1a;max-width:380px">
+      <div class="embed" style="border-left-color:#ff6b1a;max-width:360px">
         <div class="embed-title">🤝 Requisitos para Alianza</div>
-        <div class="embed-field">¡Buscamos comunidades activas para hacer alianza! Mínimo 500 miembros reales...</div>
-        <div style="margin-top:8px;background:#333;border-radius:4px;width:100%;height:80px;display:flex;align-items:center;justify-content:center;color:#555;font-size:11px">🖼️ imagen.png</div>
-        <div style="margin-top:8px"><a href="#" style="background:#5865f2;color:#fff;padding:5px 12px;border-radius:4px;font-size:12px;text-decoration:none">Solicitar Alianza ↗</a></div>
+        <div class="embed-field" style="margin-bottom:8px">¡Buscamos comunidades activas! Mínimo 500 miembros...</div>
+        <div style="margin-top:6px"><a href="#" style="background:#5865f2;color:#fff;padding:4px 11px;border-radius:4px;font-size:12px;text-decoration:none">Solicitar ↗</a></div>
+      </div>
+    </div></div>
+    <div style="padding:12px 14px 4px;font-size:11px;color:#555;font-style:italic">— Opción 3: Embed con fields (cajitas de colores) —</div>
+    <div class="msg"><div class="avatar pichon">P</div><div class="msg-body">
+      <div class="msg-head"><span class="msg-user pichon-u">Pichón</span><span class="msg-time">18:02</span></div>
+      <div class="msg-content"><span class="slash">/message</span> accion:✉️ Crear canal:#general tipo:📊 Embed con fields</div>
+    </div></div>
+    <div style="margin:6px 14px;background:#1a1a1a;border:1px solid #333;border-radius:8px;padding:14px;max-width:340px">
+      <div style="font-weight:700;color:#fff;font-size:13px;margin-bottom:10px">Crear Embed con Fields</div>
+      <div style="margin-bottom:7px"><div style="font-size:10px;color:#aaa;margin-bottom:2px">TÍTULO PRINCIPAL</div><div style="background:#111;border:1px solid #333;border-radius:4px;padding:5px 8px;font-size:12px;color:#777">📋 Normas del servidor</div></div>
+      <div style="margin-bottom:7px"><div style="font-size:10px;color:#aaa;margin-bottom:2px">FIELDS (Título|Contenido uno por línea)</div><div style="background:#111;border:1px solid #333;border-radius:4px;padding:5px 8px;font-size:12px;color:#777;min-height:55px">🔥 Regla 1|No hacer spam<br>⚡ Regla 2|Respetar a todos<br>🎉 Regla 3|Divertirse</div></div>
+      <div style="margin-bottom:10px"><div style="font-size:10px;color:#aaa;margin-bottom:2px">FOOTER</div><div style="background:#111;border:1px solid #333;border-radius:4px;padding:5px 8px;font-size:12px;color:#777">PichonBot • Comunidad</div></div>
+      <div style="display:flex;gap:8px;justify-content:flex-end"><div style="padding:5px 12px;border-radius:4px;background:#4e5058;font-size:12px;color:#fff">Cancelar</div><div style="padding:5px 12px;border-radius:4px;background:#5865f2;font-size:12px;color:#fff">Enviar</div></div>
+    </div>
+    <div class="msg" style="margin-top:6px"><div class="avatar bot">🐱</div><div class="msg-body">
+      <div class="msg-head"><span class="msg-user bot-u">PichonBot</span><span class="badge">BOT</span><span class="msg-time">18:02</span></div>
+      <div class="embed" style="border-left-color:#ff6b1a;max-width:360px">
+        <div class="embed-title">📋 Normas del servidor</div>
+        <div style="display:flex;flex-direction:column;gap:6px;margin-top:6px">
+          <div style="background:#1a1a1a;border-left:3px solid #e74c3c;border-radius:0 4px 4px 0;padding:7px 10px"><div style="font-size:12px;font-weight:700;color:#fff;margin-bottom:2px">🔥 Regla 1</div><div style="font-size:12px;color:#aaa">No hacer spam</div></div>
+          <div style="background:#1a1a1a;border-left:3px solid #f1c40f;border-radius:0 4px 4px 0;padding:7px 10px"><div style="font-size:12px;font-weight:700;color:#fff;margin-bottom:2px">⚡ Regla 2</div><div style="font-size:12px;color:#aaa">Respetar a todos</div></div>
+          <div style="background:#1a1a1a;border-left:3px solid #2ecc71;border-radius:0 4px 4px 0;padding:7px 10px"><div style="font-size:12px;font-weight:700;color:#fff;margin-bottom:2px">🎉 Regla 3</div><div style="font-size:12px;color:#aaa">Divertirse</div></div>
+        </div>
+        <div style="margin-top:8px;font-size:10px;color:#555">PichonBot • Comunidad</div>
       </div>
     </div></div>
     <div class="msg"><div class="avatar bot">🐱</div><div class="msg-body">
-      <div class="msg-head"><span class="msg-user bot-u">PichonBot</span><span class="badge">BOT</span><span class="msg-time">18:01</span></div>
-      <div class="resp">✅ Embed enviado en #general!</div>
+      <div class="msg-head"><span class="msg-user bot-u">PichonBot</span><span class="badge">BOT</span><span class="msg-time">18:02</span></div>
+      <div class="resp">✅ Embed con fields enviado en #general!</div>
     </div></div>`},
   'msg-edit':{desc:"Edita un mensaje de PichonBot. Igual que message-create, elige entre texto o embed personalizado.",admin:true,prefix:"!message-edit-PichonBot",html:`
     <div style="padding:8px 14px 4px;font-size:11px;color:#555;font-style:italic">— Editar como texto normal —</div>
@@ -376,19 +396,19 @@ const DATA = {
       <div class="msg-head"><span class="msg-user bot-u">PichonBot</span><span class="badge">BOT</span><span class="msg-time">17:02</span></div>
       <div class="resp">✅ Embed editado correctamente!</div>
     </div></div>`},
-  'msg-delete':{desc:"Elimina un mensaje enviado por PichonBot en un canal específico.",admin:true,prefix:"!message-delete-PichonBot",html:`
+  'msg-delete':{desc:"Elimina CUALQUIER mensaje del canal por ID, no solo los del bot.",admin:true,prefix:"!message-eliminar-PichonBot",html:`
     <div class="msg"><div class="avatar pichon">P</div><div class="msg-body">
       <div class="msg-head"><span class="msg-user pichon-u">Pichón</span><span class="msg-time">17:05</span></div>
-      <div class="msg-content"><span class="slash">/message-delete</span> message-id:1234567890 canal:#general</div>
+      <div class="msg-content"><span class="slash">/message</span> accion:🗑️ Eliminar message-id:1234567890123456789</div>
     </div></div>
     <div class="msg"><div class="avatar bot">🐱</div><div class="msg-body">
       <div class="msg-head"><span class="msg-user bot-u">PichonBot</span><span class="badge">BOT</span><span class="msg-time">17:05</span></div>
-      <div class="resp">✅ ¡Mensaje eliminado correctamente!</div>
+      <div class="resp">✅ Mensaje eliminado correctamente.</div>
     </div></div>`},
-  'msg-list':{desc:"Lista los últimos mensajes enviados por PichonBot en un canal.",admin:true,prefix:"!message-list-PichonBot",html:`
+  'msg-list':{desc:"Lista los últimos mensajes enviados por PichonBot en un canal.",admin:true,prefix:"!message-lista-PichonBot",html:`
     <div class="msg"><div class="avatar pichon">P</div><div class="msg-body">
       <div class="msg-head"><span class="msg-user pichon-u">Pichón</span><span class="msg-time">17:10</span></div>
-      <div class="msg-content"><span class="slash">/message-list</span> canal:#general</div>
+      <div class="msg-content"><span class="slash">/message</span> accion:📋 Lista canal:#general</div>
     </div></div>
     <div class="msg"><div class="avatar bot">🐱</div><div class="msg-body">
       <div class="msg-head"><span class="msg-user bot-u">PichonBot</span><span class="badge">BOT</span><span class="msg-time">17:10</span></div>
@@ -527,7 +547,13 @@ function show(key, el) {
   const d = DATA[key];
   document.getElementById('messages').innerHTML = `<div class="divider">— Inicio del canal #demo-comandos —</div>` + d.html;
   document.getElementById('chan-desc').textContent = `— Simulación de /${key}`;
-  document.getElementById('info-cmd').textContent = `/${key}`;
+  const cmdNames = {
+    'msg-create': '/message accion:Crear',
+    'msg-edit':   '/message accion:Editar',
+    'msg-delete': '/message accion:Eliminar',
+    'msg-list':   '/message accion:Lista'
+  };
+  document.getElementById('info-cmd').textContent = cmdNames[key] || `/${key}`;
   document.getElementById('info-desc').textContent = d.desc;
   document.getElementById('info-pfx').textContent = d.prefix;
   const acc = document.getElementById('info-acc');
