@@ -187,6 +187,7 @@
   <div class="mobile-cat">
     <div class="mobile-cat-label">⚙️ Sistema</div>
     <div class="mobile-cat-row">
+      <button class="mobile-btn" onclick="show('horario',this)">/horario</button>
       <button class="mobile-btn" onclick="show('nextcancel',this)">/nextcancel</button>
       <button class="mobile-btn" onclick="show('logs',this)">/logs</button>
       <button class="mobile-btn" onclick="show('help',this)">/help</button>
@@ -213,6 +214,7 @@
     <div class="cmd-item" onclick="show('bloquear',this)">/bloquear-links <span class="admin-b">ADMIN</span></div>
     <div class="cmd-item" onclick="show('desbloquear',this)">/quitar-bloqueo-links <span class="admin-b">ADMIN</span></div>
     <div class="cat-label">⚙️ Sistema</div>
+    <div class="cmd-item" onclick="show('horario',this)">/horario <span class="admin-b">ADMIN</span></div>
     <div class="cmd-item" onclick="show('nextcancel',this)">/nextcancel <span class="admin-b">ADMIN</span></div>
     <div class="cmd-item" onclick="show('logs',this)">/logs <span class="admin-b">ADMIN</span></div>
     <div class="cmd-item" onclick="show('help',this)">/help <span class="public-b">TODOS</span></div>
@@ -483,6 +485,31 @@ const DATA = {
     <div class="msg"><div class="avatar bot">🐱</div><div class="msg-body">
       <div class="msg-head"><span class="msg-user bot-u">PichonBot</span><span class="badge">BOT</span><span class="msg-time">19:20</span></div>
       <div class="resp success">🔓 Bloqueo de links eliminado en #general.</div>
+    </div></div>`},
+  horario:{desc:"Envía el horario semanal de Pichon_8 al canal con mención a @Viewer. Solo admins.",admin:true,prefix:"!horario-PichonBot #canal",html:`
+    <div class="msg"><div class="avatar pichon">P</div><div class="msg-body">
+      <div class="msg-head"><span class="msg-user pichon-u">Pichón</span><span class="msg-time">20:00</span></div>
+      <div class="msg-content"><span class="slash">/horario</span> canal:#anuncios</div>
+    </div></div>
+    <div class="msg"><div class="avatar bot">🐱</div><div class="msg-body">
+      <div class="msg-head"><span class="msg-user bot-u">PichonBot</span><span class="badge">BOT</span><span class="msg-time">20:00</span></div>
+      <div class="msg-content"><span style="color:#e67e22">@Viewer</span></div>
+      <div class="embed" style="max-width:380px">
+        <div class="embed-title">📅 Horario Semanal de Pichon_8</div>
+        <div class="embed-field" style="font-style:italic;margin-bottom:8px">Reducción de horas de streaming provisional. ¡Gracias por el apoyo! ❤️</div>
+        <div class="embed-field">😴 <strong>Lunes</strong> — Sube un TikTok</div>
+        <div class="embed-field">🔴 <strong>Martes</strong> — Sube un vídeo para YouTube</div>
+        <div class="embed-field">🎵 <strong>Miércoles</strong> — Sube un TikTok</div>
+        <div class="embed-field">⚡ <strong>Jueves</strong> — Sube un vídeo para YouTube</div>
+        <div class="embed-field">🎉 <strong>Viernes</strong> — TikTok + Stream <strong>19:00 - 21:00</strong> 🇪🇸</div>
+        <div class="embed-field">🌙 <strong>Sábado</strong> — Stream <strong>19:00 - 21:00</strong> 🇪🇸</div>
+        <div class="embed-field">☀️ <strong>Domingo</strong> — Stream <strong>19:00 - 21:00</strong> 🇪🇸</div>
+        <div style="margin-top:8px;font-size:10px;color:#555">Horario provisional • Pichon_8</div>
+      </div>
+    </div></div>
+    <div class="msg"><div class="avatar bot">🐱</div><div class="msg-body">
+      <div class="msg-head"><span class="msg-user bot-u">PichonBot</span><span class="badge">BOT</span><span class="msg-time">20:00</span></div>
+      <div class="resp">✅ Horario enviado en #anuncios con mención a @Viewer.</div>
     </div></div>`},
   nextcancel:{desc:"Cancela el próximo stream programado y detiene los recordatorios automáticos de 12 horas.",admin:true,prefix:"!nextcancel-PichonBot",html:`
     <div class="msg"><div class="avatar pichon">P</div><div class="msg-body">
